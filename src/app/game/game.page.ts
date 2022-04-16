@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Food } from '../models/food';
+import { Game } from '../models/game';
+import { Input } from '../models/input';
 import { Snake } from '../models/snake';
 
 @Component({
@@ -12,86 +15,44 @@ export class GamePage implements OnInit {
   interval: any;
 
   snake: Snake = new Snake();
-  score: number = 0;
-  speed: number = 8;
-  nextAxisY: number = 0;
-  nextAxisX: number = 1;
-  screenSize: number = 100;
-  sizePath: number = 10;
-  foodY: number = 15;
-  foodX: number = 15;
-  foodPoints: number = 1;
-  gameOver: boolean = false;
+  food: Food = new Food();
+  game: Game = new Game();
+  input: Input = new Input();
 
   constructor() {
-     this.interval = setInterval(this.drawGame.bind(this), 1024 / this.speed);
+     this.interval = setInterval(this.drawGame.bind(this), 1024 / this.game.speed);
    }
 
   ngOnInit() {
     this.canvas = document.getElementById('canvas');
     this.canvas.width  = window.innerWidth;
-    this.screenSize = this.canvas.width / this.sizePath;
+    this.game.createScreen(this.canvas);
     this.context = this.canvas.getContext('2d');
   }
 
   drawGame(){
-    this.moveSnake();
-    this.moveTail();
-    this.verifyHitScreen();
-    this.feedSnake();
+    this.snake.move(this.input.nextAxisX, this.input.nextAxisY);
+
+    this.game.verifyGameOver(this.snake);
+
+    if (this.game.gameOver) {
+      clearInterval(this.interval);
+    }
+
+    this.snake.createPath();
+    this.snake.moveTail();
+
+    this.snake.hitScreen(this.game.screenSize);
+
+ 
+    
+    const eaten = this.snake.ate(this.food.x, this.food.y);
+    this.food.wasEaten(eaten, this.game.screenSize);
+    this.game.addScorePoints(eaten, this.food.points);
+
     this.drawScreen();
     this.drawSnake();
     this.drawFood();
-  }
-
-  moveSnake() {
-    this.snake.axisX += this.nextAxisX;
-    this.snake.axisY += this.nextAxisY;
-
-    for (let i = 0; i < this.snake.path.length; i++) {
-      if (this.snake.path[i].x == this.snake.axisX && this.snake.path[i].y == this.snake.axisY){
-          clearInterval(this.interval);
-          this.gameOver = true;
-      }
-    }
-
-    this.snake.path.push({
-      x: this.snake.axisX,
-      y: this.snake.axisY
-    });
-  }
-
-  moveTail() {
-    while (this.snake.path.length > this.snake.sizeTail){
-      this.snake.path.shift(); 
-    }
-  }
-
-  verifyHitScreen() {
-    if (this.snake.axisX < 0){
-      this.snake.axisX = this.screenSize -1;
-    }
-    
-    if (this.snake.axisX > this.screenSize - 1){
-      this.snake.axisX = 0;
-    }
-    
-    if (this.snake.axisY < 0){
-      this.snake.axisY = this.screenSize -1;
-    }
-    
-    if (this.snake.axisY > this.screenSize - 1){
-      this.snake.axisY = 0;
-    }
-  }
-
-  feedSnake() {
-    if (this.snake.axisX == this.foodX && this.snake.axisY == this.foodY){
-      this.snake.sizeTail += this.foodPoints;
-      this.score += this.foodPoints;
-      this.foodX = Math.floor(Math.random() * this.screenSize);
-      this.foodY = Math.floor(Math.random() * this.screenSize);
-    }
   }
 
   drawScreen() {
@@ -103,10 +64,10 @@ export class GamePage implements OnInit {
     this.context.fillStyle = "red";
     for (let i = 0; i < this.snake.path.length; i++) {
         this.context.fillRect(
-          this.snake.path[i].x * this.sizePath,
-          this.snake.path[i].y * this.sizePath,
-          this.sizePath,
-          this.sizePath
+          this.snake.path[i].x * this.game.sizePath,
+          this.snake.path[i].y * this.game.sizePath,
+          this.game.sizePath,
+          this.game.sizePath
         );
     }
   }
@@ -114,35 +75,17 @@ export class GamePage implements OnInit {
   drawFood() {
     this.context.fillStyle = "green";
     this.context.fillRect(
-      this.foodX * this.sizePath, 
-      this.foodY * this.sizePath,
-      this.sizePath, this.sizePath
+      this.food.x * this.game.sizePath, 
+      this.food.y * this.game.sizePath,
+      this.game.sizePath, this.game.sizePath
     );
   }
 
   changeDirectionAxleX(axleValue: number) {
-    if (this.nextAxisX > 0 && axleValue < 0) {
-      return;
-    }
-    this.nextAxisX = axleValue;
-    this.nextAxisY = 0;
+    this.input.moveToAxleX(axleValue);
   }
 
   changeDirectionAxleY(axleValue: number) {
-    if (this.hasPermissionToChangeDirectionAxleY(axleValue)) {
-      return;
-    }
-    this.nextAxisY = axleValue;
-    this.nextAxisX = 0;
-  }
-
-  hasPermissionToChangeDirectionAxleY(axleValue: number) {
-    return (this.nextAxisY > 0 && axleValue < 0) 
-      || (this.nextAxisY < 0 && axleValue > 0);
-  }
-
-  hasPermissionToChangeDirectionAxleX(axleValue: number) {
-    return (this.nextAxisX > 0 && axleValue < 0) 
-      || (this.nextAxisX < 0 && axleValue > 0);
+    this.input.moveToAxleY(axleValue);
   }
 }
