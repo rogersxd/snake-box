@@ -1,0 +1,7 @@
+{
+  "name": "snake-box",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
