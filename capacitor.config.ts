@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.rogers.snakebox',
-  appName: 'snake-box',
+  appName: 'Snakebox',
   webDir: 'www',
   bundledWebRuntime: false
 };

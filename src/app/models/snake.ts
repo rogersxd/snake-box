@@ -2,6 +2,7 @@ export class Snake {
   public defaultSizeTail: number = 3;
   public sizeTail: number = 3;
   public path: Array<any> = [];
+  public snakePath: Array<any> = [];
   public axisX: number = 10;
   public axisY: number = 10;
 
@@ -12,6 +13,11 @@ export class Snake {
 
   public createPath() {
     this.path.push({
+      x: this.axisX,
+      y: this.axisY
+    });
+
+    this.snakePath.push({
       x: this.axisX,
       y: this.axisY
     });
@@ -42,7 +48,12 @@ export class Snake {
     }
   }
 
-  public ate(foodX: number, foodY: number) {
-    return this.axisX == foodX && this.axisY == foodY;
+  public ate(foodX: number, foodY: number, foodPoints: number) {
+    if (this.axisX == foodX && this.axisY == foodY) {
+      this.sizeTail += foodPoints;
+      return true;
+    }
+    
+    return false;
   }
 }

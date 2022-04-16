@@ -32,7 +32,7 @@ export class GamePage implements OnInit {
     this.context = this.canvas.getContext('2d');
 
     this.game.speed = parseInt(await this.storage.get('selectedSpeedLevel'));
-    this.interval = setInterval(this.drawGame.bind(this), 1024 / this.game.speed);
+    this.interval = setInterval(this.drawGame.bind(this), 1000 / this.game.speed);
   }
 
   drawGame(){
@@ -48,10 +48,8 @@ export class GamePage implements OnInit {
     this.snake.moveTail();
 
     this.snake.hitScreen(this.game.screenSize);
-
- 
     
-    const eaten = this.snake.ate(this.food.x, this.food.y);
+    const eaten = this.snake.ate(this.food.x, this.food.y, this.food.points);
     this.food.wasEaten(eaten, this.game.screenSize);
     this.game.addScorePoints(eaten, this.food.points);
 
