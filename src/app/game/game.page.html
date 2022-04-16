@@ -1,0 +1,52 @@
+<ion-content>
+  <canvas id="canvas" width="1000" height="400" [hidden]="gameOver"></canvas>
+  <div style="height: 400px; text-align: center;" [hidden]="!gameOver">
+    <h4>Pontuação Final</h4>
+    <h2 style="color: green;">
+      {{ score }}
+    </h2>
+  </div>
+
+  <div align="center">
+    <h3>{{ score }}</h3>
+  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="3">
+      </ion-col>
+      <ion-col align="center" size="6">
+        <ion-button shape="round" color="warning" size="large" expand="block" (click)="changeDirectionAxleY(-1)">
+          <ion-icon name="chevron-up-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="3">
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6">
+        <ion-button shape="round" color="warning" size="large" expand="block" (click)="changeDirectionAxleX(-1)">
+          <ion-icon name="chevron-back-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+
+      <ion-col size="6" align="right">
+        <ion-button shape="round" color="warning" size="large" expand="block" (click)="changeDirectionAxleX(1)">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    
+    <ion-row>
+      <ion-col size="3">
+      </ion-col>
+      <ion-col align="center" size="6">
+        <ion-button shape="round" color="warning" size="large" expand="block" (click)="changeDirectionAxleY(1)">
+          <ion-icon name="chevron-down-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="3">
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
