@@ -1,7 +1,7 @@
 <ion-content>
-  <canvas id="canvas" width="1000" height="400" [hidden]="gameOver"></canvas>
-  <div style="height: 400px; text-align: center;" [hidden]="!gameOver">
-    <h4>Pontuação Final</h4>
+  <canvas id="canvas" width="1000" height="400" [hidden]="game.gameOver"></canvas>
+  <div class="game-over" [hidden]="!game.gameOver">
+  <h4>PONTUAÇÃO FINAL</h4>
     <h2 style="color: green;">
       {{ game.score }}
     </h2>
