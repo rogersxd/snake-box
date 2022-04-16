@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Snake } from '../models/snake';
 
 @Component({
   selector: 'app-game',
@@ -10,14 +11,9 @@ export class GamePage implements OnInit {
   context: any;
   interval: any;
 
+  snake: Snake = new Snake();
   score: number = 0;
   speed: number = 8;
-  defaultSizeTail: number = 3;
-  sizeTail: number = 3;
-  snakePath: Array<any> = [];
-  snakeTail: Array<any> = [];
-  snakeAxisX: number = 10;
-  snakeAxisY: number = 10;
   nextAxisY: number = 0;
   nextAxisX: number = 1;
   screenSize: number = 100;
@@ -49,49 +45,49 @@ export class GamePage implements OnInit {
   }
 
   moveSnake() {
-    this.snakeAxisX += this.nextAxisX;
-    this.snakeAxisY += this.nextAxisY;
+    this.snake.axisX += this.nextAxisX;
+    this.snake.axisY += this.nextAxisY;
 
-    for (let i = 0; i < this.snakePath.length; i++) {
-      if (this.snakePath[i].x == this.snakeAxisX && this.snakePath[i].y == this.snakeAxisY){
+    for (let i = 0; i < this.snake.path.length; i++) {
+      if (this.snake.path[i].x == this.snake.axisX && this.snake.path[i].y == this.snake.axisY){
           clearInterval(this.interval);
           this.gameOver = true;
       }
     }
 
-    this.snakePath.push({
-      x: this.snakeAxisX,
-      y: this.snakeAxisY
+    this.snake.path.push({
+      x: this.snake.axisX,
+      y: this.snake.axisY
     });
   }
 
   moveTail() {
-    while (this.snakePath.length > this.sizeTail){
-      this.snakePath.shift(); 
+    while (this.snake.path.length > this.snake.sizeTail){
+      this.snake.path.shift(); 
     }
   }
 
   verifyHitScreen() {
-    if (this.snakeAxisX < 0){
-      this.snakeAxisX = this.screenSize -1;
+    if (this.snake.axisX < 0){
+      this.snake.axisX = this.screenSize -1;
     }
     
-    if (this.snakeAxisX > this.screenSize - 1){
-      this.snakeAxisX = 0;
+    if (this.snake.axisX > this.screenSize - 1){
+      this.snake.axisX = 0;
     }
     
-    if (this.snakeAxisY < 0){
-      this.snakeAxisY = this.screenSize -1;
+    if (this.snake.axisY < 0){
+      this.snake.axisY = this.screenSize -1;
     }
     
-    if (this.snakeAxisY > this.screenSize - 1){
-      this.snakeAxisY = 0;
+    if (this.snake.axisY > this.screenSize - 1){
+      this.snake.axisY = 0;
     }
   }
 
   feedSnake() {
-    if (this.snakeAxisX == this.foodX && this.snakeAxisY == this.foodY){
-      this.sizeTail += this.foodPoints;
+    if (this.snake.axisX == this.foodX && this.snake.axisY == this.foodY){
+      this.snake.sizeTail += this.foodPoints;
       this.score += this.foodPoints;
       this.foodX = Math.floor(Math.random() * this.screenSize);
       this.foodY = Math.floor(Math.random() * this.screenSize);
@@ -105,10 +101,10 @@ export class GamePage implements OnInit {
 
   drawSnake() {
     this.context.fillStyle = "red";
-    for (let i = 0; i < this.snakePath.length; i++) {
+    for (let i = 0; i < this.snake.path.length; i++) {
         this.context.fillRect(
-          this.snakePath[i].x * this.sizePath,
-          this.snakePath[i].y * this.sizePath,
+          this.snake.path[i].x * this.sizePath,
+          this.snake.path[i].y * this.sizePath,
           this.sizePath,
           this.sizePath
         );
