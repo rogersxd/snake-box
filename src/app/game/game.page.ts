@@ -22,7 +22,7 @@ export class GamePage implements OnInit {
   input: Input = new Input();
 
   constructor(private storage: Storage) {
-     
+      this.storage.create();
    }
 
   async ngOnInit() {
