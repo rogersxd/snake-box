@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Storage } from '@ionic/storage';
+
 import { Food } from '../models/food';
 import { Game } from '../models/game';
 import { Input } from '../models/input';
@@ -19,15 +21,18 @@ export class GamePage implements OnInit {
   game: Game = new Game();
   input: Input = new Input();
 
-  constructor() {
-     this.interval = setInterval(this.drawGame.bind(this), 1024 / this.game.speed);
+  constructor(private storage: Storage) {
+     
    }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.canvas = document.getElementById('canvas');
     this.canvas.width  = window.innerWidth;
     this.game.createScreen(this.canvas);
     this.context = this.canvas.getContext('2d');
+
+    this.game.speed = parseInt(await this.storage.get('selectedSpeedLevel'));
+    this.interval = setInterval(this.drawGame.bind(this), 1024 / this.game.speed);
   }
 
   drawGame(){

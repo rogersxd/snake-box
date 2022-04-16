@@ -2,6 +2,14 @@
   <div id="container">
     <h2>SnakeBox</h2>
     <img src="/assets/snakebox.png">
+    <ion-list>
+      <ion-item>
+        <ion-label>Nível</ion-label>
+        <ion-select (ionChange)="changeLevel($event.detail.value)">
+          <ion-select-option *ngFor="let level of levels" [value]="level.speed">{{ level.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
     <ion-button color="danger" [routerLink]="['/game']" size="large" fill="outline">Jogar</ion-button>
   </div>
 </ion-content>

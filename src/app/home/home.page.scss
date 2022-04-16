@@ -33,3 +33,18 @@ h2 {
 ion-content {
   --background: #fff !important;
 }
+
+ion-list {
+  background: #fff !important;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 10px;
+  border: 1px solid #ff4b00;
+  border-radius: 10px;
+}
+
+ion-item {
+  --color: #ff4b00;
+  --background: #fff !important;
+  --border-width: 0 0 0 0 !important;
+}

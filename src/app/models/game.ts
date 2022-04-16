@@ -2,7 +2,7 @@ import { Snake } from "./snake";
 
 export class Game {
   public score: number = 0;
-  public speed: number = 8;
+  public speed: number = 30;
   public screenSize: number = 100;
   public sizePath: number = 10;
   public gameOver: boolean = false;
@@ -17,7 +17,7 @@ export class Game {
     }
     this.score += points;
   }
-
+  
   public verifyGameOver(snake: Snake) {
     for (let i = 0; i < snake.path.length; i++) {
       if (snake.path[i].x == snake.axisX && snake.path[i].y == snake.axisY) {
